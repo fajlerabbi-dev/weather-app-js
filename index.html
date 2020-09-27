@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Temperature Hot</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            background: url(images/bg-image.jpg) no-repeat;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="col-md-6 m-auto py-5">
+            <div class="input-group mb-3">
+                <input type="text" class="weather-input form-control" placeholder="Enter a location for Weather ...">
+                <div class="input-group-append">
+                    <button type="button" class="weather-search btn btn-danger">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="weather-status text-white text-center">
+            <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
+            <h1 class="weather-city">Dhaka</h1>
+            <h3><span class="weather-temp">38.06</span>&deg;C</h3>
+            <h1 class="weather-lead">Clouds</h1>
+        </div>
+    </div>
+
+
+    <script>
+
+        const api = {
+            key: "2bdf1ca00234f610c84298162510add9",
+            baseUrl: "http://api.openweathermap.org/data/2.5/"
+        }
+
+        document.querySelector('.weather-search').addEventListener('click', setQuery);
+        document.querySelector('.weather-input').addEventListener('keypress', function(e){
+            if (e.keyCode == 13) {
+                setQuery();
+            }
+        })
+
+        function setQuery() {
+            const searchBoxValue = document.querySelector('.weather-input').value;
+
+            fetch(`${api.baseUrl}weather?q=${searchBoxValue}&units=metric&appid=${api.key}`)
+            .then(res=>res.json())
+            .then(displayResult)
+        }
+
+        function displayResult(weather) {
+            console.log(weather);
+            const city = document.querySelector('.weather-city');
+            city.innerText = `${weather.name}, ${weather.sys.country}`;
+
+            const weatherTemp = document.querySelector('.weather-temp');
+            weatherTemp.innerText = Math.floor(weather.main.temp);
+
+            const weatherLead = document.querySelector('.weather-lead');
+            weatherLead.innerText = weather.weather[0].main;
+            
+        }
+    </script>
+
+</body>
+
+</html>
